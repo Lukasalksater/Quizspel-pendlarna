@@ -1,0 +1,5 @@
+public class QuizGame {
+    private List<Question> questions;
+    private int score;
+    private int correctAnswers;
+    private long totalTime;
