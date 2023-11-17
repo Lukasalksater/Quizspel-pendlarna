@@ -25,15 +25,18 @@ public class Test {
         
         questionList.add(q1);
         questionList.add(q2);
+        int howManyQuestions = questionList.size();
 
         while(questionList.size() > 0) {
             Question question = questionList.remove(randomgen.nextInt(questionList.size()));
             System.out.println("Question: " + question.getQuestion());
             System.out.println("Answers: " + question.getAnswers());
 
-            System.out.println(Collections.binarySearch(question.getAnswers(), "4."));
 
            int guess = s.nextInt();
+
+       
+     
 
 
            if (guess == question.getCorrectAnswer()+1) {
@@ -43,12 +46,23 @@ public class Test {
             
            }
 
+           if (guess >4) {
+            System.out.println("To high of a number!");
+           }
+
+           if (guess <1) {
+            System.out.println("To small of a number");
+           }
+
            else {
-            System.out.println("Wrong guess, correct guess was 3!");
+
+            int correctAnswer = question.getCorrectAnswer()+1;
+
+            System.out.println("Wrong guess, correct guess was " + correctAnswer +"!");
            }
         }
 
-        System.out.println(correctGuesses);
+        System.out.println("Du fick " + correctGuesses +" rätt av " + howManyQuestions);
         s.close();
     }
 
