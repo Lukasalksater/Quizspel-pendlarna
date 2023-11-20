@@ -1,1 +1,224 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Scanner;
+import java.util.Collections;
 
+
+public class QuizGame {
+    private static final int QUESTION_TIME_LIMIT = 30;
+    private static final int MAX_POINTS = 30;
+    private static final int MIN_POINTS = 0;
+    private static final int TIME_PENALTY = 1;
+    
+    private static final List<Question> Musikfrågor = new ArrayList<>();
+    private static final List<Question> Spelfrågor = new ArrayList<>();
+    private static final List<Question> Geografifrågor = new ArrayList<>();
+    
+    private static final Random random = new Random();
+    
+    private static int score;
+    private static int correctAnswers;
+    private static long totalTime;
+    
+    public static void main(String[] args) {
+        initializeQuestions();
+        
+        System.out.println("Valkommen till pendlarnas quiz spel!");
+        System.out.println("Valj en kategori (1= Musik, 2=Spel,3=Geografi,4=Blandade fragor):");
+        int categoryChoice = new Scanner(System.in).nextInt();
+        
+        List<Question> chosenCategoryQuestions;
+        if (categoryChoice == 1) {
+            chosenCategoryQuestions = Musikfrågor;
+        } else if (categoryChoice == 2) {
+            chosenCategoryQuestions = Spelfrågor;
+        } else if (categoryChoice == 3) {
+            chosenCategoryQuestions = Geografifrågor;
+        } else {
+            chosenCategoryQuestions = new ArrayList<>();
+            chosenCategoryQuestions.addAll(Musikfrågor);
+            chosenCategoryQuestions.addAll(Spelfrågor);
+            chosenCategoryQuestions.addAll(Geografifrågor);
+        }
+        
+        System.out.println("Valj antal fragor att spela (2 eller 5):");
+        int numQuestions = new Scanner(System.in).nextInt();
+        
+        List<Question> selectedQuestions = selectRandomQuestions(chosenCategoryQuestions, numQuestions);
+        
+        score = 0;
+        correctAnswers = 0;
+        totalTime = 0;
+        
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                switchToNextQuestion();
+            }
+        };
+        timer.schedule(task, QUESTION_TIME_LIMIT * 1000);
+        
+        for (int i = 0; i < selectedQuestions.size(); i++) {
+            Question question = selectedQuestions.get(i);
+            
+            System.out.println("Fråga " + (i + 1) + ":");
+            System.out.println(question.getQuestionText());
+            
+            List<String> shuffledOptions = shuffleOptions(question.getOptions());
+            for (int f = 0; f < shuffledOptions.size(); f++) {
+                System.out.println((f + 1) + ". " + shuffledOptions.get(f));
+            }
+            
+            long startTime = System.currentTimeMillis();
+            int answer = new Scanner(System.in).nextInt();
+            long endTime = System.currentTimeMillis();
+            
+            timer.cancel(); 
+            
+            long elapsedTime = (endTime - startTime) / 1000;
+            totalTime += elapsedTime;
+            
+            if (answer == question.getCorrectOption()) {
+                int questionScore = calculateScore(elapsedTime);
+                score += questionScore;
+                correctAnswers++;
+                
+                System.out.println("Rätt svar! Du fick " + questionScore + " poäng.");
+            } else {
+                System.out.println("Fel svar! Rätt svar är " + question.getCorrectOption() + ".");
+            }
+            
+            System.out.println();
+            
+            timer = new Timer();
+            task = new TimerTask() {
+                public void run() {
+                    switchToNextQuestion();
+                }
+            };
+            timer.schedule(task, QUESTION_TIME_LIMIT * 1000); 
+        }
+        
+        timer.cancel(); 
+        
+        System.out.println("Spelet är slut!");
+        System.out.println("Poäng: " + score);
+        System.out.println("Antal rätt: " + correctAnswers);
+        System.out.println("Total tid: " + totalTime + " sekunder");
+    }
+    
+    private static void switchToNextQuestion() {
+        System.out.println("Tiden ärtyvärr slut för den här frågan!");
+        System.out.println("Du får ingen poäng för den här frågan.");
+        System.out.println();
+    }
+    
+    private static void initializeQuestions() {
+    
+     // Musikkategorin
+     Musikfrågor.add(new Question("Vilket av följande album har Madonna inte gjort?",
+             List.of("Music", "Like a Prayer", " Control", "Like a Virgin"), 3));
+     Musikfrågor.add(new Question("Hur många gånger har Sverige vunnit Eurovision Song Contest? ",
+              List.of("4", "5", "6", "7"), 4));
+     Musikfrågor.add(new Question("Vilken musiklegendar vann Nobelpriset i litteratur 2016? ",
+              List.of("Leonard Cohen", "Joni Mitchell", "Bob Dylan", "Smokey Robinson"), 3));
+      Musikfrågor.add(new Question("I vilket landskap brukar Sweden Rock Festival arrangeras?",
+              List.of("Blekinge", "Dalarna", "Småland", "Värmland"), 1));
+      Musikfrågor.add(new Question("Vilken artist heter egentligen Reginald Dwight?",
+                List.of("Elton John", "Bono", "Bob Dylan", "Freddie Mercury"), 1));
+
+
+
+        
+        // Spelkategorin
+        Spelfrågor.add(new Question("Vilket spel är känt för att ha utvecklats av Mojang och handlar om att bygga och överleva i en öppen värld? ",
+             List.of("Cube World", " Rust", "Starbound ", "Minecraft"), 4));
+        Spelfrågor.add(new Question("Vilket spel är känt för att ha en blockig, pixlig grafikstil och låter spelarna bygga sina egna världar? ",
+              List.of("Terraria ", "Stardew Valley ", "Castle Crashers ", " Spelunky"), 1));
+        Spelfrågor.add(new Question("Vad är namnet på det första spelet i The Elder Scrolls-serien? ",
+             List.of("Skyrim", "Oblivion", "Daggerfall ", "Morrowind "), 3));
+        Spelfrågor.add(new Question("Vad heter huvudkaraktären i spelet \"The Legend of Zelda\"?",
+              List.of("Link", "Mario", " Sonic", " Zelda"), 1));
+        Spelfrågor.add(new Question(" Vilket företag är känd för att ha skapat Super Mario Bros.?",
+             List.of("Sega", "Nintendo", "Sony", "Microsoft "), 2));
+
+
+       
+        // Geografikategorin
+        Geografifrågor.add(new Question("Vilken stad är huvudstad i Australien?",
+                List.of("Sydney", "Melbourne", "Canberra", "Brisbane"), 3));
+        Geografifrågor.add(new Question("Vilket land är känt för att ha den största öknen i världen? ",
+                List.of( "Australien", "Saudi arabien", "USA", "Algeriet"), 4));
+        Geografifrågor.add(new Question(" Vilket land har den längsta kustlinjen i världen? ",
+                List.of("Ryssland", "Kanada", "Kina", "Indien"), 2));
+        Geografifrågor.add(new Question("Vilket land är känt för att ha den högsta vattenfallet i världen?",
+                List.of("Kanada", "Mexico", "Venezuela", "Brasilien"), 3));
+         Geografifrågor.add(new Question(" Vilket land är känt för att ha den högsta bergstoppen i världen?",
+                List.of("Nepal", "Pakistan", "Kina", "Indien"), 1));
+
+
+
+    }
+    
+    private static List<Question> selectRandomQuestions(List<Question> allQuestions, int numQuestions) {
+        List<Question> selectedQuestions = new ArrayList<>();
+        
+        int totalQuestions = allQuestions.size();
+        if (numQuestions > totalQuestions) {
+            numQuestions = totalQuestions;
+        }
+        
+        for (int i = 0; i < numQuestions; i++) {
+            int randomIndex = random.nextInt(allQuestions.size());
+            selectedQuestions.add(allQuestions.get(randomIndex));
+            allQuestions.remove(randomIndex);
+        }
+        
+        return selectedQuestions;
+    }
+    
+    private static List<String> shuffleOptions(List<String> options) {
+    List<String> shuffledOptions = new ArrayList<>(options);
+    Collections.shuffle(shuffledOptions);
+    return shuffledOptions;
+    }
+    
+    private static int calculateScore(long elapsedTime) {
+           if (elapsedTime < 8000) {
+        return MAX_POINTS;
+    } else {
+        int questionScore = MAX_POINTS - (int) elapsedTime - TIME_PENALTY;
+        if (questionScore < MIN_POINTS) {
+            questionScore = MIN_POINTS;
+        }
+        return questionScore;
+    }
+}
+           }
+
+class Question {
+    private String questionText;
+    private List<String> options;
+    private int correctOption;
+    
+    public Question(String questionText, List<String> options, int correctOption) {
+        this.questionText = questionText;
+        this.options = options;
+        this.correctOption = correctOption;
+    }
+    
+    public String getQuestionText() {
+        return questionText;
+    }
+    
+    public List<String> getOptions() {
+        return options;
+    }
+    
+    public int getCorrectOption() {
+        return correctOption;
+    }
+}
