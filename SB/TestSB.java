@@ -33,7 +33,7 @@ public class TestSB {
 
         while (questionList.size() > 0) {
             QuestionSB question = questionList.remove(randomgen.nextInt(questionList.size()));
-            System.out.println("Question: " + question.getQuestion());
+            System.out.println("Question: " + question.getQuestion() + "?");
             System.out.println("Answers: " + question.getAnswers());
 
             int guess = scanner.nextInt();
