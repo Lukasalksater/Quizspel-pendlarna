@@ -1,7 +1,9 @@
 package TheGame;
 
+import java.util.Scanner;
+
 public class HighscoreMain {
-    public static void ShowHighscore (int totalScore, long totalTime, int numberOfQuestions) {
+    public static void ShowHighscore (int totalScore, long totalTime, int numberOfQuestions, Scanner scanner) {
         HighscoreTable highscoreTable = new HighscoreTable(numberOfQuestions);
         highscoreTable.setHighscoreFilePath();
 
@@ -14,11 +16,11 @@ public class HighscoreMain {
 
             if (currentScore.equals(removedHighscore) == false) {
                 highscoreTable.congratulateOnHighscore();
-                String chosenHighscoreName = highscoreTable.chooseNameForHighscore();
+                String chosenHighscoreName = highscoreTable.chooseNameForHighscore(scanner);
                 currentScore.setName(chosenHighscoreName);
 
                 highscoreTable.displayHighscoreTable();
-                highscoreTable.saveHighscoresToFile();
+                //highscoreTable.saveHighscoresToFile();
             } else {
                 highscoreTable.displayHighscoreTable();
             }

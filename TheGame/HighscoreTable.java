@@ -1,14 +1,14 @@
 package TheGame;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -85,17 +85,16 @@ public class HighscoreTable {
         System.out.println();
     }
 
-    public String chooseNameForHighscore() {
-        Scanner scanner = new Scanner(System.in, "Cp850");
+    public String chooseNameForHighscore(Scanner scanner) {
         System.out.print("Skriv in ditt namn (max 10 tecken): ");
+        scanner.nextLine();
         String chosenHighscoreName = scanner.nextLine();
+        
         System.out.println();
 
         if (chosenHighscoreName.length() > HIGHSCORE_NAME_CHARACTER_LIMIT) {
             chosenHighscoreName = chosenHighscoreName.substring(0, HIGHSCORE_NAME_CHARACTER_LIMIT);
         }
-
-        scanner.close();
 
         return chosenHighscoreName;
     }

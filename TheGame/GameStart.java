@@ -11,9 +11,10 @@ public class GameStart {
         GameSetup.initializeQuestions();
         
         System.out.println("Valkommen till pendlarnas quiz spel!");
-        System.out.println("Valj en kategori (1= Musik, 2=Spel,3=Geografi,4=Blandade fragor):");
+        System.out.println();
+        System.out.println("Valj en kategori (1 = Musik, 2 = Spel, 3 = Geografi, 4 = Blandade fragor):");
 
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in, "Cp850");
         int categoryChoice = scanner.nextInt();
         
       Catagory catagory = new Catagory();
@@ -22,19 +23,19 @@ public class GameStart {
 
       
         
-        System.out.println("Valj antal fragor att spela (2 eller 5):");
+        System.out.println("Välj antal fragor att spela (2 eller 5):");
         int numQuestions = scanner.nextInt();
-
+        System.out.println();
       
         
         List<Question> selectedQuestions = SelectQuestion.selectRandomQuestions(catagory.chosenCategoryQuestions, numQuestions);
 
         TimerSetup timerSetup = new TimerSetup();
-        timerSetup.runTimer(selectedQuestions);
+        timerSetup.runTimer(selectedQuestions, scanner);
 
        
 
-        HighscoreMain.ShowHighscore(timerSetup.getScore(), timerSetup.getTotalTime(), numQuestions);
+        HighscoreMain.ShowHighscore(timerSetup.getScore(), timerSetup.getTotalTime(), numQuestions, scanner);
 
         scanner.close();
 

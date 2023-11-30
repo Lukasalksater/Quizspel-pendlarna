@@ -48,8 +48,8 @@ public class TimerSetup {
 
 
 
-    public void runTimer( List<Question> selectedQuestions){
- Scanner s = new Scanner(System.in);
+    public void runTimer( List<Question> selectedQuestions, Scanner scanner){
+
         score = 0;
         correctAnswers = 0;
        totalTime = 0;
@@ -68,14 +68,15 @@ public class TimerSetup {
             System.out.println("Fråga " + (i + 1) + ":");
             System.out.println(question.getQuestionText());
             
-            List<String> shuffledOptions = ShuffleAnswers.shuffleOptions(question.getOptions());
+            //List<String> shuffledOptions = ShuffleAnswers.shuffleOptions(question.getOptions());
+            List<String> shuffledOptions = question.getOptions();
             for (int f = 0; f < shuffledOptions.size(); f++) {
                 System.out.println((f + 1) + ". " + shuffledOptions.get(f));
             }
             
             long startTime = System.currentTimeMillis();
            
-            int answer = s.nextInt();
+            int answer = scanner.nextInt();
             long endTime = System.currentTimeMillis();
             
             timer.cancel(); 
@@ -111,11 +112,11 @@ public class TimerSetup {
         
         
         System.out.println("Spelet är slut!");
+        System.out.println();
         System.out.println("Poäng: " + score);
         System.out.println("Antal rätt: " + correctAnswers);
         System.out.println("Total tid: " + totalTime + " sekunder");
-        
-        s.close();
+        System.out.println();
     }
      }
     
