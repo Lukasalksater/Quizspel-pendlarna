@@ -20,7 +20,7 @@ public class HighscoreMain {
                 currentScore.setName(chosenHighscoreName);
 
                 highscoreTable.displayHighscoreTable();
-                //highscoreTable.saveHighscoresToFile();
+                highscoreTable.saveHighscoresToFile();
             } else {
                 highscoreTable.displayHighscoreTable();
             }
