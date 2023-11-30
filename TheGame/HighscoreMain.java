@@ -1,8 +1,9 @@
+package TheGame;
+
 public class HighscoreMain {
-    public static void main(String[] args) {
-        int totalScore = 143;
-        int totalTime = 51;
-        int numberOfQuestions = 10;
+
+
+    public static void ShowHighscore (int totalScore, long totalTime, int numberOfQuestions) {
 
         HighscoreTable highscoreTable = new HighscoreTable(numberOfQuestions);
         highscoreTable.setHighscoreFilePath();

@@ -1,15 +1,16 @@
+package TheGame;
 public class Highscore {
     String name;
     int points;
-    int time;
+    long time;
 
-    public Highscore(String name, int points, int time) {
+    public Highscore(String name, int points, long time) {
         this.name = name;
         this.points = points;
         this.time = time;
     }
 
-    public Highscore(int points, int time) {
+    public Highscore(int points, long time) {
         this("X", points, time);
     }
 
@@ -25,7 +26,7 @@ public class Highscore {
         return points;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 }

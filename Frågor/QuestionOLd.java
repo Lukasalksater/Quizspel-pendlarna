@@ -2,7 +2,7 @@ package Frågor;
 
 import java.util.*;
 
-public class Question {
+public class QuestionOLd {
     List<String> answers = new ArrayList<>();
     public List<String> getAnswers() {
         return answers;
@@ -23,7 +23,7 @@ public class Question {
         return question;
     }
 
-    public Question(String question) {
+    public QuestionOLd(String question) {
         this.question = question;
     }
 
