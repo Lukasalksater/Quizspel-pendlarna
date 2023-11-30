@@ -8,11 +8,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class HighscoreTable {
+    int numberOfQuestions;
     private List<Highscore> highscoreList = new ArrayList<>();
     private File HighscoreFile;
     private final int HIGHSCORE_NAME_CHARACTER_LIMIT = 10;
 
-    public void setHighscoreFilePath(int numberOfQuestions) {
+    public HighscoreTable(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
+    }
+
+    public void setHighscoreFilePath() {
         HighscoreFile = new File("Quizspel-pendlarna/Highscores/" + numberOfQuestions + "_questions_highscore.txt");
     }
     
@@ -61,7 +66,7 @@ public class HighscoreTable {
     }
 
     public String chooseNameForHighscore() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in, "Cp850");
         System.out.print("Skriv in ditt namn (max 10 tecken): ");
         String chosenHighscoreName = scanner.nextLine();
         System.out.println();
@@ -75,13 +80,15 @@ public class HighscoreTable {
         return chosenHighscoreName;
     }
 
-    public void displayHighscoreTable(int numberOfQuestions) {
+    public void displayHighscoreTable() {
         System.out.println("Highscores (" + numberOfQuestions + " frågor)");
         System.out.println();
+        System.out.println(String.format("%7s %13s %3s" , "Namn", "Poäng", "Tid"));
+        System.out.println("---------------------------");
 
         int i = 1;
         for (Highscore highscore : highscoreList) {
-            System.out.println(i + ". " + highscore.getName() + " " + highscore.getPoints() + " " + highscore.getTime());
+            System.out.println(String.format(i + ". %-12s %-5s %-4s" , highscore.getName(), highscore.getPoints(), highscore.getTime()));
             i++;
         }
 

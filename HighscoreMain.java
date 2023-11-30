@@ -4,9 +4,9 @@ public class HighscoreMain {
         int totalTime = 51;
         int numberOfQuestions = 10;
 
-        HighscoreTable highscoreTable = new HighscoreTable();
+        HighscoreTable highscoreTable = new HighscoreTable(numberOfQuestions);
 
-        highscoreTable.setHighscoreFilePath(numberOfQuestions);
+        highscoreTable.setHighscoreFilePath();
         highscoreTable.fetchHighscoresFromFile();
 
         Highscore currentScore = new Highscore(totalScore, totalTime);
@@ -17,12 +17,13 @@ public class HighscoreMain {
         if (currentScore.equals(removedHighscore) == false) {
             highscoreTable.congratulateOnHighscore();
             String chosenHighscoreName = highscoreTable.chooseNameForHighscore();
+            System.out.println(chosenHighscoreName);
             currentScore.setName(chosenHighscoreName);
 
-            highscoreTable.displayHighscoreTable(numberOfQuestions);
+            highscoreTable.displayHighscoreTable();
             highscoreTable.saveHighscoresToFile();
         } else {
-            highscoreTable.displayHighscoreTable(numberOfQuestions);
+            highscoreTable.displayHighscoreTable();
         }
     }      
 }
