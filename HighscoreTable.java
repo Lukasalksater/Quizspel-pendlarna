@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,23 +23,31 @@ public class HighscoreTable {
     public void setHighscoreFilePath() {
         HighscoreFile = new File("Quizspel-pendlarna/Highscores/" + numberOfQuestions + "_questions_highscore.txt");
     }
-    
-    public void fetchHighscoresFromFile() {
+
+    public boolean fetchHighscoresFromFile() {
+        boolean fileReadingCompleted = false;
+
         try {
-            Scanner fileReader = new Scanner(HighscoreFile);
+            BufferedReader fileReader = new BufferedReader(new FileReader(HighscoreFile));
       
-            while (fileReader.hasNextLine()) {
-                String fileLine = fileReader.nextLine();
+            String fileLine;
+		    while ((fileLine = fileReader.readLine()) != null) {
                 String[] fileLineArray = fileLine.split(",", 3);
 
                 Highscore highscore = new Highscore(fileLineArray[0], Integer.parseInt(fileLineArray[1]), Integer.parseInt(fileLineArray[2]));
                 highscoreList.add(highscore);
-            }
-
+		    }
+      
             fileReader.close();
+
+            fileReadingCompleted = true;    
         } catch (FileNotFoundException e) {
             System.out.println("Filen med highscore-listan kunde inte hittas.");
+        } catch (IOException e) {
+            System.out.println("Det gick inte att läsa in highscore-listan.");
         }
+
+        return fileReadingCompleted;
     }
 
     public void addCurrentScoreToList(Highscore highscore) {
