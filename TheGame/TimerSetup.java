@@ -12,8 +12,8 @@ public class TimerSetup {
    
     
     
-    private static int score;
-    public static int getScore() {
+    private int score;
+    public int getScore() {
         return score;
     }
 
@@ -23,8 +23,8 @@ public class TimerSetup {
 
 
 
-    private static int correctAnswers;
-    public static int getCorrectAnswers() {
+    private int correctAnswers;
+    public int getCorrectAnswers() {
         return correctAnswers;
     }
 
@@ -36,9 +36,9 @@ public class TimerSetup {
 
 
 
-    private static long totalTime;
+    private long totalTime;
 
-     public static long getTotalTime() {
+     public long getTotalTime() {
         return totalTime;
     }
 

@@ -1,4 +1,5 @@
 package TheGame;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,21 +16,22 @@ public class HighscoreTable {
     int numberOfQuestions;
     private List<Highscore> highscoreList = new ArrayList<>();
     private File HighscoreFile;
-    private final int HIGHSCORE_NAME_CHARACTER_LIMIT = 10;
+    private static final int HIGHSCORE_NAME_CHARACTER_LIMIT = 10;
 
     public HighscoreTable(int numberOfQuestions) {
         this.numberOfQuestions = numberOfQuestions;
     }
 
     public void setHighscoreFilePath() {
-        HighscoreFile = new File("Quizspel-pendlarna/Highscores/" + numberOfQuestions + "_questions_highscore.txt");
+        HighscoreFile = new File("Quizspel-pendlarna/TheGame/Highscores/" + numberOfQuestions + "_questions_highscore.txt");
     }
 
     public boolean fetchHighscoresFromFile() {
         boolean fileReadingCompleted = false;
+        BufferedReader fileReader = null;
 
         try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(HighscoreFile));
+            fileReader = new BufferedReader(new FileReader(HighscoreFile));
       
             String fileLine;
 		    while ((fileLine = fileReader.readLine()) != null) {
@@ -38,14 +40,20 @@ public class HighscoreTable {
                 Highscore highscore = new Highscore(fileLineArray[0], Integer.parseInt(fileLineArray[1]), Integer.parseInt(fileLineArray[2]));
                 highscoreList.add(highscore);
 		    }
-      
-            fileReader.close();
 
             fileReadingCompleted = true;    
         } catch (FileNotFoundException e) {
             System.out.println("Filen med highscore-listan kunde inte hittas.");
         } catch (IOException e) {
             System.out.println("Det gick inte att läsa in highscore-listan.");
+        } finally {
+            if (fileReader != null) {
+                try {
+                    fileReader.close();
+                } catch (IOException e) {
+                    System.out.println("Läsningen av filen kunde inte avslutas korrekt.");
+                }
+            }
         }
 
         return fileReadingCompleted;
@@ -108,16 +116,25 @@ public class HighscoreTable {
     }
 
     public void saveHighscoresToFile() {
+        FileWriter fileWriter = null;
+
         try {
-            FileWriter fileWriter = new FileWriter(HighscoreFile, false);
-            
+            fileWriter = new FileWriter(HighscoreFile, false);
+
             for (Highscore highscore : highscoreList) {
                 fileWriter.write(highscore.getName() + "," + highscore.getPoints() + "," + highscore.getTime() + System.lineSeparator());
             }
- 
-            fileWriter.close();
-        } catch (Exception e) { 
+   
+        } catch (IOException e) { 
             System.out.println("Kunde inte spara highscore-listan i en fil.");
-        } 
+        } finally {
+            if (fileWriter != null) {
+                try {
+                    fileWriter.close();
+                } catch (IOException e) {
+                    System.out.println("Skrivning till fil kunde inte avslutas korrekt.");
+                }
+            }
+        }
     }
 }

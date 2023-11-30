@@ -34,7 +34,7 @@ public class GameStart {
 
        
 
-        HighscoreMain.ShowHighscore(timerSetup.getScore(), timerSetup.getTotalTime(), timerSetup.getCorrectAnswers());
+        HighscoreMain.ShowHighscore(timerSetup.getScore(), timerSetup.getTotalTime(), numQuestions);
 
         scanner.close();
 
