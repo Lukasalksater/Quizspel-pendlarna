@@ -14,16 +14,21 @@ import java.util.Scanner;
 
 public class HighscoreTable {
     int numberOfQuestions;
+    String chosencategoryName;
     private List<Highscore> highscoreList = new ArrayList<>();
     private File HighscoreFile;
     private static final int HIGHSCORE_NAME_CHARACTER_LIMIT = 10;
 
-    public HighscoreTable(int numberOfQuestions) {
+    public HighscoreTable(int numberOfQuestions, String chosencategoryName) {
         this.numberOfQuestions = numberOfQuestions;
+        this.chosencategoryName = chosencategoryName;
     }
 
     public void setHighscoreFilePath() {
-        HighscoreFile = new File("Quizspel-pendlarna/TheGame/Highscores/" + numberOfQuestions + "_questions_highscore.txt");
+        String directory = "Quizspel-pendlarna/TheGame/Highscores/";
+        String fileName = numberOfQuestions + "_questions_highscore_" + chosencategoryName + ".txt";
+        
+        HighscoreFile = new File(directory + fileName);
     }
 
     public boolean fetchHighscoresFromFile() {
@@ -100,7 +105,7 @@ public class HighscoreTable {
     }
 
     public void displayHighscoreTable() {
-        System.out.println("Highscores (" + numberOfQuestions + " frågor)");
+        System.out.println("Highscores (" + numberOfQuestions + " frågor, " + chosencategoryName + ")");
         System.out.println();
         System.out.println(String.format("%7s %13s %3s" , "Namn", "Poäng", "Tid"));
         System.out.println("---------------------------");

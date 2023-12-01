@@ -17,10 +17,9 @@ public class GameStart {
         Scanner scanner = new Scanner(System.in, "Cp850");
         int categoryChoice = scanner.nextInt();
         
-      Catagory catagory = new Catagory();
+        Catagory catagory = new Catagory();
 
-      catagory.chooseCatagory(categoryChoice);
-
+        String chosencategoryName = catagory.chooseCatagory(categoryChoice);
       
         
         System.out.println("Välj antal fragor att spela (2 eller 5):");
@@ -33,9 +32,27 @@ public class GameStart {
         TimerSetup timerSetup = new TimerSetup();
         timerSetup.runTimer(selectedQuestions, scanner);
 
-       
+        HighscoreTable highscoreTable = new HighscoreTable(numQuestions, chosencategoryName);
+        highscoreTable.setHighscoreFilePath();
 
-        HighscoreMain.ShowHighscore(timerSetup.getScore(), timerSetup.getTotalTime(), numQuestions, scanner);
+        if (highscoreTable.fetchHighscoresFromFile()) {
+            Highscore currentScore = new Highscore(timerSetup.getScore(), timerSetup.getTotalTime());
+            highscoreTable.addCurrentScoreToList(currentScore);
+            
+            highscoreTable.sortHighscoresByPointsThenTime();
+            Highscore removedHighscore = highscoreTable.removeWorstHighscoreFromList();
+
+            if (currentScore.equals(removedHighscore) == false) {
+                highscoreTable.congratulateOnHighscore();
+                String chosenHighscoreName = highscoreTable.chooseNameForHighscore(scanner);
+                currentScore.setName(chosenHighscoreName);
+
+                highscoreTable.displayHighscoreTable();
+                highscoreTable.saveHighscoresToFile();
+            } else {
+                highscoreTable.displayHighscoreTable();
+            }
+        }
 
         scanner.close();
 

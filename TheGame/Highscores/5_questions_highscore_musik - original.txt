@@ -1,0 +1,5 @@
+Fuskaren,100,32
+Oraklet,90,45
+Geniet,80,32
+Chansarn,70,19
+Sopan,20,53
