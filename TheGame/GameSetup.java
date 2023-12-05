@@ -1,8 +1,15 @@
 package TheGame;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameSetup {
+    private static File HighscoreFile;
+    private static String fileName;
 
     private static final List<Question> Musikfrågor = new ArrayList<>();
     public static List<Question> getMusikfrågor() {
@@ -23,50 +30,53 @@ public class GameSetup {
         return Geografifrågor;
     }
 
+    public static void setQuestionsFilePath(int categoryNumber) {
+        String directory = "Quizspel-pendlarna/TheGame/Questions/";
+        fileName = "questions_category" + categoryNumber + ".txt";
+      
+        HighscoreFile = new File(directory + fileName);
+    }
 
-    public static void initializeQuestions() {
-    
-     // Musikkategorin
-     Musikfrågor.add(new Question("Vilket av följande album har Madonna inte gjort?",
-             List.of("Music", "Like a Prayer", " Control", "Like a Virgin"), 3));
-     Musikfrågor.add(new Question("Hur många gånger har Sverige vunnit Eurovision Song Contest? ",
-              List.of("4", "5", "6", "7"), 4));
-     Musikfrågor.add(new Question("Vilken musiklegendar vann Nobelpriset i litteratur 2016? ",
-              List.of("Leonard Cohen", "Joni Mitchell", "Bob Dylan", "Smokey Robinson"), 3));
-      Musikfrågor.add(new Question("I vilket landskap brukar Sweden Rock Festival arrangeras?",
-              List.of("Blekinge", "Dalarna", "Småland", "Värmland"), 1));
-      Musikfrågor.add(new Question("Vilken artist heter egentligen Reginald Dwight?",
-                List.of("Elton John", "Bono", "Bob Dylan", "Freddie Mercury"), 1));
-
-
-
+    public static void fetchQuestionsFromFile(int categoryNumber) {
+        BufferedReader fileReader = null;
         
-        // Spelkategorin
-        Spelfrågor.add(new Question("Vilket spel är känt för att ha utvecklats av Mojang och handlar om att bygga och överleva i en öppen värld? ",
-             List.of("Cube World", " Rust", "Starbound ", "Minecraft"), 4));
-        Spelfrågor.add(new Question("Vilket spel är känt för att ha en blockig, pixlig grafikstil och låter spelarna bygga sina egna världar? ",
-              List.of("Terraria ", "Stardew Valley ", "Castle Crashers ", " Spelunky"), 1));
-        Spelfrågor.add(new Question("Vad är namnet på det första spelet i The Elder Scrolls-serien? ",
-             List.of("Skyrim", "Oblivion", "Daggerfall ", "Morrowind "), 3));
-        Spelfrågor.add(new Question("Vad heter huvudkaraktären i spelet \"The Legend of Zelda\"?",
-              List.of("Link", "Mario", " Sonic", " Zelda"), 1));
-        Spelfrågor.add(new Question(" Vilket företag är känd för att ha skapat Super Mario Bros.?",
-             List.of("Sega", "Nintendo", "Sony", "Microsoft "), 2));
+        try {
+            fileReader = new BufferedReader(new FileReader(HighscoreFile));
+      
+            String fileLine;
+                     
+            while ((fileLine = fileReader.readLine()) != null) {
+                String[] fileLineArray = fileLine.split("@", 5);
 
+                List<Answer> answerList = new ArrayList<>();
+                
+                answerList.add(new Answer(fileLineArray[1]));
+                answerList.add(new Answer(fileLineArray[2]));
+                answerList.add(new Answer(fileLineArray[3]));
+                answerList.add(new CorrectAnswer(fileLineArray[4]));
+                
+                Question question = new Question(fileLineArray[0], answerList, fileLineArray[4]);
 
-       
-        // Geografikategorin
-        Geografifrågor.add(new Question("Vilken stad är huvudstad i Australien?",
-                List.of("Sydney", "Melbourne", "Canberra", "Brisbane"), 3));
-        Geografifrågor.add(new Question("Vilket land är känt för att ha den största öknen i världen? ",
-                List.of( "Australien", "Saudi arabien", "USA", "Algeriet"), 4));
-        Geografifrågor.add(new Question(" Vilket land har den längsta kustlinjen i världen? ",
-                List.of("Ryssland", "Kanada", "Kina", "Indien"), 2));
-        Geografifrågor.add(new Question("Vilket land är känt för att ha den högsta vattenfallet i världen?",
-                List.of("Kanada", "Mexico", "Venezuela", "Brasilien"), 3));
-         Geografifrågor.add(new Question(" Vilket land är känt för att ha den högsta bergstoppen i världen?",
-                List.of("Nepal", "Pakistan", "Kina", "Indien"), 1));
-
-    
-}
+                if (categoryNumber == 1) {
+                    Musikfrågor.add(question);
+                } else if (categoryNumber == 2) {
+                    Spelfrågor.add(question);
+                } else if (categoryNumber == 3) {
+                    Geografifrågor.add(question);
+                }
+            }   
+        } catch (FileNotFoundException e) {
+            System.out.println("Filen " + fileName + " kunde inte hittas.");
+        } catch (IOException e) {
+            System.out.println("Det gick inte att läsa in frågorna.");
+        } finally {
+            if (fileReader != null) {
+                try {
+                    fileReader.close();
+                } catch (IOException e) {
+                    System.out.println("Läsningen av filen kunde inte avslutas korrekt.");
+                }
+            }
+        }
+    }
 }

@@ -23,7 +23,7 @@ public class Catagory {
             chosenCategoryQuestions.addAll(GameSetup.getSpelfrågor());
             chosenCategoryQuestions.addAll(GameSetup.getGeografifrågor());
 
-            chosencategoryName = "blandade frågor";
+            chosencategoryName = "blandade fragor";
         }
 
         return chosencategoryName;

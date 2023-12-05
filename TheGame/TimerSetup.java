@@ -68,10 +68,11 @@ public class TimerSetup {
             System.out.println("Fråga " + (i + 1) + ":");
             System.out.println(question.getQuestionText());
             
-            //List<String> shuffledOptions = ShuffleAnswers.shuffleOptions(question.getOptions());
-            List<String> shuffledOptions = question.getOptions();
+            question.shuffleOptions();
+            List<Answer> shuffledOptions = question.getOptions();
+
             for (int f = 0; f < shuffledOptions.size(); f++) {
-                System.out.println((f + 1) + ". " + shuffledOptions.get(f));
+                System.out.println((f + 1) + ". " + shuffledOptions.get(f).getAnswerText());
             }
             
             long startTime = System.currentTimeMillis();
@@ -85,15 +86,17 @@ public class TimerSetup {
             
             long elapsedTime = (endTime - startTime) / 1000;
             totalTime += elapsedTime;
+
             
-            if (answer == question.getCorrectOption()) {
+            
+            if (question.getOptions().get(answer - 1) instanceof CorrectAnswer) {
                 int questionScore = ScoreCalculation.calculateScore(elapsedTime);
                 score += questionScore;
                 correctAnswers++;
                 
                 System.out.println("Rätt svar! Du fick " + questionScore + " poäng.");
             } else {
-                System.out.println("Fel svar! Rätt svar är " + question.getCorrectOption() + ".");
+                System.out.println("Fel svar! Rätt svar är " + question.getCorrectAnswer() + ".");
             }
             
             System.out.println();
