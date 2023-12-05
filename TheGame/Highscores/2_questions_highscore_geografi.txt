@@ -1,5 +1,0 @@
-ä,60,4
-Fuskaren,50,22
-Oraklet,40,20
-Geniet,30,3
-Chansarn,30,32

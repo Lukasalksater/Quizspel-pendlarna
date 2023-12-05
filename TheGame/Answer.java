@@ -1,7 +1,7 @@
 package TheGame;
 
 public class Answer {
-    String answerText;
+    protected String answerText;
 
     public Answer(String answerText) {
         this.answerText = answerText;
