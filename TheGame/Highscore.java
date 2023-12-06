@@ -1,4 +1,5 @@
 package TheGame;
+
 public class Highscore {
     String name;
     int points;

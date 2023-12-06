@@ -13,10 +13,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class HighscoreTable {
-    int numberOfQuestions;
-    String categoryName;
+    private int numberOfQuestions;
+    private String categoryName;
     private List<Highscore> highscoreList = new ArrayList<>();
     private File HighscoreFile;
+    private String fileName;
     private final int HIGHSCORE_NAME_CHARACTER_LIMIT = 10;
 
     public HighscoreTable(int numberOfQuestions, String categoryName) {
@@ -26,7 +27,7 @@ public class HighscoreTable {
 
     public void setHighscoreFilePath() {
         String directory = "Quizspel-pendlarna/TheGame/Highscores/";
-        String fileName = numberOfQuestions + "_questions_highscore_" + categoryName + ".txt";
+        fileName = numberOfQuestions + "_questions_highscore_" + categoryName + ".txt";
         
         HighscoreFile = new File(directory + fileName);
     }
@@ -48,7 +49,7 @@ public class HighscoreTable {
 
             fileReadingCompleted = true;    
         } catch (FileNotFoundException e) {
-            System.out.println("Filen med highscore-listan kunde inte hittas.");
+            System.out.println("Filen " + fileName + " kunde inte hittas.");
         } catch (IOException e) {
             System.out.println("Det gick inte att läsa in highscore-listan.");
         } finally {
@@ -129,7 +130,7 @@ public class HighscoreTable {
             }
    
         } catch (IOException e) { 
-            System.out.println("Kunde inte spara highscore-listan i en fil.");
+            System.out.println("Det gick inte att spara highscore-listan i " + fileName + ".");
         } finally {
             if (fileWriter != null) {
                 try {
